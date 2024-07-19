@@ -12,3 +12,12 @@ yarn-error.log*
 
 # Build output
 client/build/
+/client/.next
+/client/.next/cache
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# Next.js static files
+/client/out/
