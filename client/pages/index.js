@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 function index() {
 
-  const [message, setMessage] = useState('Cargando...');
+  const [message, setMessage] = useState('Cargando Pagina...');
   const [mejorserver, setMejorserver] = useState([]);  
   useEffect(() => {
       fetch('http://localhost:8080/api/home').then(
