@@ -5,7 +5,7 @@ function index() {
   const [message, setMessage] = useState('Cargando Pagina...');
   const [mejorserver, setMejorserver] = useState([]);  
   useEffect(() => {
-      fetch('http://localhost:8080/api/home').then(
+      fetch('http://localhost:5526/api/home').then(
         res => res.json()
       ).then(data => {
         console.log(data);

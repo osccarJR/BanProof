@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const http = require('http');
-const PORT = 8070;
+const PORT = 5526;
 
 app.use(cors());
 
@@ -17,7 +17,7 @@ app.get('/api/home', (req, res) => {
 app.get('/api/punishments', (req, res) => {
     //get params
     const { username } = req.query;
-    http.get(`http://localhost:8080/punishments?username=${username}`, (response) => {
+    http.get(`http://localhost:5525/punishments?username=${username}`, (response) => {
       res.json(response);
       
     }).on('error', (error) => {
