@@ -40,8 +40,9 @@ body {
     padding: 10px 20px;
     background-color: #333;
     position: fixed;
-    width: 100%;
+    width: 98%;
     top: 0;
+    left: 0;
 }
 
 @keyframes heartbeat {
@@ -54,14 +55,15 @@ body {
 }
 
 .logo {
-    height: 50px;
+    height: 60px;
     animation: heartbeat 2s infinite;
 }
 
 .nav-links {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     flex-grow: 1;
+    gap: 1px;
 }
 
 .nav-links button {
@@ -72,22 +74,6 @@ body {
     padding: 10px 20px;
     margin: 0 5px;
     cursor: pointer;
-}
-
-.nav-links .pruebas {
-    background-color: white;
-    color: black;
-    margin-left: 900px;
-}
-
-.nav-links .management {
-    background-color: #ffffff;
-    color: black;
-}
-
-.nav-links .iniciar-sesion {
-    background-color: #ffffff;
-    color: black;
 }
 
 .nav-links button:hover {
@@ -138,4 +124,15 @@ body {
 
 .buttons button:hover {
     opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+    }
+
+    .nav-links {
+        margin: 10px 0;
+        justify-content: center;
+    }
 }
