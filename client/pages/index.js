@@ -1,12 +1,14 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import { signIn, signOut, useSession } from "next-auth/react";
+import SnowfallEffect from '../components/SnowfallEffect'; // Ajusta la ruta correcta
 
 export default function Home() {
     const { data: session } = useSession();
 
     return (
         <div className="container">
+            <SnowfallEffect /> {/* Usa el componente para la animación */}
             <Head>
                 <title>Watones Network</title>
                 <meta name="description" content="Watones Network - El servidor más duro" />

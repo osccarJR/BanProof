@@ -10,15 +10,16 @@ export default NextAuth({
     ],
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
-        async session({ session, token }) {
-            session.user.id = token.sub;
-            return session;
-        },
-        async jwt({ token, user, account, profile }) {
+        async jwt({ token, user, account }) {
             if (account) {
                 token.accessToken = account.access_token;
             }
             return token;
+        },
+        async session({ session, token }) {
+            session.user.id = token.sub;
+            session.accessToken = token.accessToken; // Añadir el accessToken a la sesión
+            return session;
         },
     },
 });
