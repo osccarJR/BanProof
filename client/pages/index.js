@@ -1,31 +1,41 @@
-import React, { useEffect, useState } from 'react'
+import Head from 'next/head';
+import Image from 'next/image';
+import { signIn, signOut, useSession } from "next-auth/react";
 
-function index() {
+export default function Home() {
+    const { data: session } = useSession();
 
-  const [message, setMessage] = useState('Cargando Pagina...');
-  const [mejorserver, setMejorserver] = useState([]);  
-  useEffect(() => {
-      fetch('http://localhost:5526/api/home').then(
-        res => res.json()
-      ).then(data => {
-        console.log(data);
-        setMessage(data.message);
-        setMejorserver(data.mejorserver);
-      })
-  }, [])
+    return (
+        <div className="container">
+            <Head>
+                <title>Watones Network</title>
+                <meta name="description" content="Watones Network - El servidor más duro" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
 
-  return (
-    <div>
-      <div>{message}</div>
-      {
-        mejorserver.map((server, index) => {
-          return <div key={index}>{server}</div>
-        })
-      }
+            <header className="navbar">
+                <Image src="/logo.png" alt="Watones Logo" width={50} height={50} className="logo" />
+                <div className="nav-links">
+                    {session ? (
+                        <>
+                            <p>Bienvenido, {session.user.name}!</p>
+                            <button className="management" onClick={() => window.location.href = '/manager'}>Management</button>
+                            <button className="logout" onClick={() => signOut()}>Cerrar Sesión</button>
+                        </>
+                    ) : (
+                        <button className="iniciar-sesion" onClick={() => signIn("discord")}>Iniciar Sesión</button>
+                    )}
+                </div>
+            </header>
 
-    </div>
-    
-  )
+            <main className="main-content">
+                <h1 className="main-title">Watones Network</h1>
+                <p className="main-subtitle">El servidor más duro</p>
+                <div className="buttons">
+                    <button className="discord" onClick={() => window.location.href='https://discord.com'}>Discord</button>
+                    <button className="tienda" onClick={() => window.location.href='https://tienda.watones.xyz/'}>Tienda</button>
+                </div>
+            </main>
+        </div>
+    );
 }
-
-export default index
