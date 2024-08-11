@@ -1,0 +1,74 @@
+.login-page {
+    background: linear-gradient(to bottom, #ff0000, #590b0b);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+.login-page .login-container {
+    background-color: #ffffff;
+    color: #1e1e1e;
+    border-radius: 10px;
+    padding: 30px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+}
+
+.login-page .login-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.login-page .login-form input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.login-page .login-button, .login-page .discord-login {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.login-page .discord-login {
+    background-color: #7289da;
+}
+
+.login-page .discord-login img {
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.login-page .other-options p {
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .login-page .login-container {
+        padding: 20px;
+    }
+
+    .login-page .login-title {
+        font-size: 1.5em;
+    }
+
+    .login-page .login-button, .login-page .discord-login {
+        padding: 10px;
+    }
+}
