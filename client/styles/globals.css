@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #ff0000, #590b0b);
+    background: linear-gradient(to bottom, #ffffff, #000000);
     background-size: cover;
     min-height: 100vh;
     color: white;
@@ -10,27 +10,6 @@ body {
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
-}
-
-.snowflake {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    font-size: 1em;
-    color: white;
-    opacity: 0.8;
-    pointer-events: none;
-    z-index: 9999;
-    animation: fall 10s linear infinite;
-}
-
-@keyframes fall {
-    0% {
-        transform: translateY(0) translateX(0);
-    }
-    100% {
-        transform: translateY(100vh) translateX(calc(100vw * var(--x-pos)));
-    }
 }
 
 .navbar {
@@ -93,15 +72,19 @@ body {
 }
 
 .main-subtitle {
-    font-size: 2.1em;
+    font-size: 2em;
     margin-bottom: 30px;
-    color: #1e1e1e;
+    background: linear-gradient(30deg, #F4C4F3, #f6c1f5, #ff0ffc); /* Gradiente estilo rosado */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
 }
 
 .buttons {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 20px;
 }
 
 .buttons button {
@@ -136,4 +119,46 @@ body {
         margin: 10px 0;
         justify-content: center;
     }
+}
+
+/* Logo palpitante */
+.logo-heartbeat {
+    animation: heartbeat 3s infinite;
+}
+
+/* Página de inicio con imagen de fondo, degradación de color, y desenfoque ajustable */
+.home-page {
+    position: relative;
+    min-height: 100vh;
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.home-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../public/img.png'); /* Reemplaza con la ruta de tu imagen */
+    background-size: cover;
+    background-position: center;
+    filter: blur(10px); /* Desenfoque gaussiano, ajustable */
+    z-index: -2;
+}
+
+.home-page::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 120%;
+    height: 120%;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5)); /* Degradación de color */
+    z-index: -1;
 }

@@ -1,5 +1,3 @@
-// pages/manager.js
-
 import { getSession } from "next-auth/react";
 
 export default function Manager({ session }) {
