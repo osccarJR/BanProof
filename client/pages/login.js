@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-
+import { signIn } from 'next-auth/react';
 export default function Login() {
     return (
         <div className="login-page min-h-screen flex flex-col items-center justify-center">
@@ -49,9 +49,9 @@ export default function Login() {
                 </form>
 
                 <div className="other-options text-center mt-4">
-                    <p>Or login with Discord:</p>
+                    <p>Or</p>
                     <button
-                        onClick={() => window.location.href = '/api/auth/discord'}
+                        onClick={() => signIn('discord')}
                         className="discord-login"
                     >
                         <img src="/discord-logo.png" alt="Discord Logo" width={20} height={15}/>

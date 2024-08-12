@@ -28,10 +28,10 @@ export default function Home() {
                     height={250}
                     className="logo-heartbeat"
                 />
-                <p className="main-subtitle">Bienvendio ala pagina </p>
+                <p className="main-subtitle">Bienvenido a la pagina </p>
                 <p className="main-subtitle">de tools para el staff </p>
                 <div className="buttons">
-                    <button className="discord" onClick={() => window.location.href = 'https://discord.com'}>Discord
+                    <button className="discord" onClick={() => window.location.href = 'https://discord.gg/watones'}>Discord
                     </button>
                     <button className="tienda"
                             onClick={() => window.location.href = 'https://tienda.watones.xyz/'}>Tienda
