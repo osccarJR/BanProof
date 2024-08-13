@@ -29,7 +29,6 @@ export default function Home() {
                     className="logo-heartbeat"
                 />
                 <p className="main-subtitle">Bienvenido a la pagina </p>
-                <p className="main-subtitle">de tools para el staff </p>
                 <div className="buttons">
                     <button className="discord" onClick={() => window.location.href = 'https://discord.gg/watones'}>Discord
                     </button>
