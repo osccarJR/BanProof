@@ -2,7 +2,18 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
+
 export default function Login() {
+
+
+    const handleDiscordLogin = async () => {
+        try {
+            await signIn('discord', { callbackUrl: `${window.location.origin}/` }); 
+        } catch (error) {
+            console.error('Error during Discord login:', error);
+        }
+    };
+
     return (
         <div className="login-page min-h-screen flex flex-col items-center justify-center">
             <Head>
@@ -51,8 +62,9 @@ export default function Login() {
                 <div className="other-options text-center mt-4">
                     <p>Or</p>
                     <button
-                        onClick={() => signIn('discord')}
+                        onClick={handleDiscordLogin}
                         className="discord-login"
+                        
                     >
                         <img src="/discord-logo.png" alt="Discord Logo" width={20} height={15}/>
                         Login with Discord

@@ -1,8 +1,10 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-
+import { useSession, signOut } from 'next-auth/react';
 export default function Home() {
+    const { data: session } = useSession();
+    
     return (
         <div className="home-page">
             <Head>
@@ -16,7 +18,11 @@ export default function Home() {
                     <Image src="/logo.png" alt="Watones Logo" width={50} height={50} className="logo" />
                 </Link>
                 <div className="nav-links">
-                    <button className="login" onClick={() => window.location.href = '/login'}>Iniciar Sesión</button>
+                {session ? (
+                        <button className="logout" onClick={() => signOut({ callbackUrl: '/' })}>Cerrar Sesión</button>
+                    ) : (
+                        <button className="login" onClick={() => window.location.href = '/login'}>Iniciar Sesión</button>
+                    )}
                 </div>
             </header>
 

@@ -1,40 +1,38 @@
-import axios from "axios";
-import { getSession } from "next-auth/react";
+import { getSession } from 'next-auth/react';
 
 export default async function handler(req, res) {
     const session = await getSession({ req });
 
-    if (!session) {
-        return res.status(401).json({ message: "No autenticado" });
+    if (!session || !session.accessToken) {
+        return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const discordId = session.user.id;
-    const accessToken = session.accessToken; // Debes asegurarte de guardar esto en el JWT en callbacks de NextAuth
+    const userId = session.user.id; 
+    const guildId = process.env.DISCORD_GUILD_ID;
 
     try {
-        const response = await axios.get(`https://discord.com/api/users/@me/guilds`, {
+        const memberResponse = await fetch(`https://discord.com/api/v10/guilds/${guildId}/members/${userId}`, {
             headers: {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${session.accessToken}`,
+                'Content-Type': 'application/json',
             },
+            withCredentials: true,
+            credentials: 'include', 
         });
 
-        // Filtra por el ID del servidor al que quieres verificar el rol
-        const guild = response.data.find(g => g.id === "YOUR_GUILD_ID");
-
-        if (guild) {
-            // Realiza otra llamada para obtener los roles
-            const memberResponse = await axios.get(`https://discord.com/api/guilds/YOUR_GUILD_ID/members/${discordId}`, {
-                headers: {
-                    Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
-                },
-            });
-
-            return res.status(200).json({ roles: memberResponse.data.roles });
-        } else {
-            return res.status(404).json({ message: "No en el servidor" });
+        if (!memberResponse.ok) {
+            const memberResponseText = await memberResponse.text();
+            console.error('Failed to fetch member details:', memberResponseText);
+            return res.status(memberResponse.status).json({ error: memberResponseText });
         }
+
+        const memberData = await memberResponse.json();
+        const roles = memberData.roles;
+
+        res.status(200).json({ roles });
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Error al obtener roles" });
+        console.error('Error:', error.message);
+        res.status(500).json({ error: 'Internal Server Error', details: error.message });
     }
 }
+
