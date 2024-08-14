@@ -34,8 +34,7 @@ export const authOptions = {
 
         if (targetGuild) {
         
-          isAuthorized = true;
-
+        
           
           const memberResponse = await fetch(
             `https://discord.com/api/users/@me/guilds/${process.env.DISCORD_GUILD_ID}/member`,
@@ -47,8 +46,11 @@ export const authOptions = {
           );
 
           const memberData = await memberResponse.json();
-
-          console.log(memberData.roles);
+          // Roles: *, **, y Support Team
+          const allowedRoles = ['934220641727549490','941000828511215636','940339724118286399',]
+          const hasAllowedRole = memberData.roles.some(role => allowedRoles.includes(role));
+          isAuthorized = hasAllowedRole;
+          
         }
 
         return {

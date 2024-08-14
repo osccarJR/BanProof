@@ -2,9 +2,16 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
+
+import { useState } from 'react';
 export default function Home() {
     const { data: session } = useSession();
-    
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const handleMenuToggle = () => {
+        setMenuOpen(!menuOpen);
+    };
+
     return (
         <div className="home-page">
             <Head>
@@ -18,8 +25,23 @@ export default function Home() {
                     <Image src="/logo.png" alt="Watones Logo" width={50} height={50} className="logo" />
                 </Link>
                 <div className="nav-links">
-                {session ? (
-                        <button className="logout" onClick={() => signOut({ callbackUrl: '/' })}>Cerrar Sesión</button>
+                    {session ? (
+                        <div className="profile-menu">
+                            <Image
+                                src={session.user.image}
+                                alt="Profile Picture"
+                                width={40}
+                                height={40}
+                                className="profile-pic"
+                                onClick={handleMenuToggle}
+                            />
+                            {menuOpen && (
+                                <div className="dropdown-menu">
+                                    <a href="/profile" className="menu-item" onClick={() => setMenuOpen(false)}>Ver Perfil</a>
+                                    <button className="menu-item" onClick={() => signOut({ callbackUrl: '/' })}>Cerrar Sesión</button>
+                                </div>
+                            )}
+                        </div>
                     ) : (
                         <button className="login" onClick={() => window.location.href = '/login'}>Iniciar Sesión</button>
                     )}
@@ -39,7 +61,7 @@ export default function Home() {
                     <button className="discord" onClick={() => window.location.href = 'https://discord.gg/watones'}>Discord
                     </button>
                     <button className="tienda"
-                            onClick={() => window.location.href = 'https://tienda.watones.xyz/'}>Tienda
+                        onClick={() => window.location.href = 'https://tienda.watones.xyz/'}>Tienda
                     </button>
                 </div>
             </main>
