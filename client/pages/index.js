@@ -24,6 +24,19 @@ export default function Home() {
                 <Link href="/">
                     <Image src="/logo.png" alt="Watones Logo" width={50} height={50} className="logo" />
                 </Link>
+
+                <div className="nav-buttons">
+
+                    {session?.role === 'staff' || session?.role === 'admin' ? (
+                        <button className="nav-button" onClick={() => window.location.href = '/proof'}>Pruebas</button>
+                    ) : null}
+
+                    {session?.role === 'admin' ? (
+                        <button className="nav-button" onClick={() => window.location.href = '/manager'}>Management</button>
+                    ) : null}
+
+
+                </div>
                 <div className="nav-links">
                     {session ? (
                         <div className="profile-menu">
@@ -46,6 +59,7 @@ export default function Home() {
                         <button className="login" onClick={() => window.location.href = '/login'}>Iniciar Sesión</button>
                     )}
                 </div>
+
             </header>
 
             <main className="main-content">
@@ -63,6 +77,7 @@ export default function Home() {
                     <button className="tienda"
                         onClick={() => window.location.href = 'https://tienda.watones.xyz/'}>Tienda
                     </button>
+
                 </div>
             </main>
         </div>

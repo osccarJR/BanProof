@@ -7,7 +7,7 @@ export default function Manager({ session }) {
 
     return (
         <div>
-            <h1>Página de Gestión</h1>
+            <h1>Página de Pruebas</h1>
             <p>Bienvenido {session.user.name}!</p>
         </div>
     );

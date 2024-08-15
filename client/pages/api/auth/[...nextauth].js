@@ -19,7 +19,7 @@ export const authOptions = {
 
       profile: async (profile, tokens) => {
         let isAuthorized = false;
-
+        let role = "member";
         
         const response = await fetch("https://discord.com/api/users/@me/guilds", {
           headers: {
@@ -50,6 +50,12 @@ export const authOptions = {
           const allowedRoles = ['934220641727549490','941000828511215636','940339724118286399',]
           const hasAllowedRole = memberData.roles.some(role => allowedRoles.includes(role));
           isAuthorized = hasAllowedRole;
+
+          if(memberData.roles.includes('934220641727549490') || memberData.roles.includes('941000828511215636')){
+            role = "admin";
+          } else if(memberData.roles.includes('940339724118286399')){
+            role = "staff";
+          }
           
         }
 
@@ -59,6 +65,7 @@ export const authOptions = {
           email: profile.email,
           image: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png`,
           isAuthorized: isAuthorized,
+          role: role,
           
         };
       },
@@ -77,11 +84,27 @@ export const authOptions = {
     },
 
     jwt: async ({ token, user }) => {
-      return { ...token, ...user };
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.image = user.image;
+        token.isAuthorized = user.isAuthorized;
+        token.role = user.role;
+      }
+
+      return token;
     },
 
     session: async ({ session, token }) => {
-      // session.isAdult = token?.isAdult;
+      session.id = token.id;
+      session.name = token.name;
+      session.email = token.email;
+      session.image = token.image;
+      session.isAuthorized = token.isAuthorized;
+      session.role = token.role;
+
+      
       return session;
     },
   },
