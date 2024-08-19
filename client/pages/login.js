@@ -31,37 +31,9 @@ export default function Login() {
 
             <div className="login-container mt-8">
                 <h1 className="login-title">Login</h1>
-                <form className="login-form">
-                    <div>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="Email"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="Password"
-                            required
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="login-button"
-                    >
-                        Login
-                    </button>
-                </form>
 
                 <div className="other-options text-center mt-4">
-                    <p>Or</p>
+
                     <button
                         onClick={handleDiscordLogin}
                         className="discord-login"
