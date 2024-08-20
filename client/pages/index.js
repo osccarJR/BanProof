@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSession, signOut } from 'next-auth/react';
-
+import { useSession, signOut, signIn } from 'next-auth/react';
 import { useState } from 'react';
+
 export default function Home() {
     const { data: session } = useSession();
     const [menuOpen, setMenuOpen] = useState(false);
@@ -26,7 +26,6 @@ export default function Home() {
                 </Link>
 
                 <div className="nav-buttons">
-
                     {session?.role === 'staff' || session?.role === 'admin' ? (
                         <button className="nav-button" onClick={() => window.location.href = '/proof'}>Pruebas</button>
                     ) : null}
@@ -34,9 +33,8 @@ export default function Home() {
                     {session?.role === 'admin' ? (
                         <button className="nav-button" onClick={() => window.location.href = '/manager'}>Management</button>
                     ) : null}
-
-
                 </div>
+
                 <div className="nav-links">
                     {session ? (
                         <div className="profile-menu">
@@ -56,10 +54,9 @@ export default function Home() {
                             )}
                         </div>
                     ) : (
-                        <button className="login" onClick={() => window.location.href = '/login'}>Iniciar Sesión</button>
+                        <button className="login" onClick={() => signIn('discord')}>Iniciar Sesión con Discord</button>
                     )}
                 </div>
-
             </header>
 
             <main className="main-content">
@@ -75,9 +72,8 @@ export default function Home() {
                     <button className="discord" onClick={() => window.location.href = 'https://discord.gg/watones'}>Discord
                     </button>
                     <button className="tienda"
-                        onClick={() => window.location.href = 'https://tienda.watones.xyz/'}>Tienda
+                            onClick={() => window.location.href = 'https://tienda.watones.xyz/'}>Tienda
                     </button>
-
                 </div>
             </main>
         </div>
