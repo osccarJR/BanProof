@@ -1,6 +1,6 @@
+import connectToDatabase from "@/lib/mongoose";
 import NextAuth from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
-
 const scopes = ["identify", "email", "guilds"].join(" "); // Incluye 'email' en los alcances
 
 export const authOptions = {
@@ -49,6 +49,7 @@ export const authOptions = {
         token.isAuthorized = user.isAuthorized;
         token.roles = user.roles || ["member"];
         token.access_token = user.access_token;
+        token.lastRoleFetch = Date.now(); 
       }
 
       return token;
@@ -62,6 +63,19 @@ export const authOptions = {
       session.isAuthorized = token.isAuthorized;
       session.roles = token.roles || ["member"];
       session.access_token = token.access_token;
+      
+      const THIRTY_MINUTES = 30 * 60 * 1000;
+      if (Date.now() - token.lastRoleFetch > THIRTY_MINUTES) {
+        const { roles, isAuthorized } = await fetchRoles(token.access_token);
+        
+        session.roles = roles;
+        session.isAuthorized = isAuthorized;
+
+        token.roles = roles; // Actualiza los roles en el token
+        token.isAuthorized = isAuthorized;
+        token.lastRoleFetch = Date.now(); // Actualiza la última vez que se obtuvieron los roles
+      }
+
 
       return session;
     },
