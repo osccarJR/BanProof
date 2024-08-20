@@ -26,11 +26,11 @@ export default function Home() {
                 </Link>
 
                 <div className="nav-buttons">
-                    {session?.role === 'staff' || session?.role === 'admin' ? (
+                    {session?.roles?.includes('staff') || session?.roles?.includes('management') ? (
                         <button className="nav-button" onClick={() => window.location.href = '/proof'}>Pruebas</button>
                     ) : null}
 
-                    {session?.role === 'admin' ? (
+                    {session?.roles?.includes('management') ? (
                         <button className="nav-button" onClick={() => window.location.href = '/manager'}>Management</button>
                     ) : null}
                 </div>

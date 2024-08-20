@@ -17,39 +17,7 @@ export const authOptions = {
       },
 
       profile: async (profile, tokens) => {
-        let isAuthorized = false;
-        let role = "member";
-
-        const response = await fetch("https://discord.com/api/users/@me/guilds", {
-          headers: {
-            Authorization: `Bearer ${tokens.access_token}`,
-          },
-        });
-
-        const guilds = await response.json();
-        const targetGuild = guilds.find(guild => guild.id === process.env.DISCORD_GUILD_ID);
-
-        if (targetGuild) {
-          const memberResponse = await fetch(
-              `https://discord.com/api/users/@me/guilds/${process.env.DISCORD_GUILD_ID}/member`,
-              {
-                headers: {
-                  Authorization: `Bearer ${tokens.access_token}`,
-                },
-              }
-          );
-
-          const memberData = await memberResponse.json();
-          const allowedRoles = ['934220641727549490', '941000828511215636', '940339724118286399'];
-          const hasAllowedRole = memberData.roles.some(role => allowedRoles.includes(role));
-          isAuthorized = hasAllowedRole;
-
-          if(memberData.roles.includes('934220641727549490') || memberData.roles.includes('941000828511215636')){
-            role = "admin";
-          } else if(memberData.roles.includes('940339724118286399')){
-            role = "staff";
-          }
-        }
+        const { roles, isAuthorized } = await fetchRoles(tokens.access_token);
 
         return {
           id: profile.id,
@@ -57,7 +25,8 @@ export const authOptions = {
           email: profile.email, // Asegúrate de que el correo electrónico se extrae correctamente
           image: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png`,
           isAuthorized: isAuthorized,
-          role: role,
+          roles: roles || ["member"],
+          access_token: tokens.access_token,
         };
       },
     }),
@@ -78,7 +47,8 @@ export const authOptions = {
         token.email = user.email; // Asegúrate de que el correo electrónico esté en el token
         token.image = user.image;
         token.isAuthorized = user.isAuthorized;
-        token.role = user.role;
+        token.roles = user.roles || ["member"];
+        token.access_token = user.access_token;
       }
 
       return token;
@@ -90,11 +60,36 @@ export const authOptions = {
       session.email = token.email; // Asegúrate de que el correo electrónico esté en la sesión
       session.image = token.image;
       session.isAuthorized = token.isAuthorized;
-      session.role = token.role;
+      session.roles = token.roles || ["member"];
+      session.access_token = token.access_token;
 
       return session;
     },
   },
 };
+
+async function fetchRoles(accessToken) {
+  try {
+    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/updateRoles`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Ocurrio un fallo al obtener los roles');
+    }
+
+    const data = await response.json();
+    const roles = data.roles || ["member"];
+    const isAuthorized = roles.includes("management") || roles.includes("staff");
+    return { roles, isAuthorized };
+  } catch (error) {
+    console.error('Error al obtener los roles:', error);
+    return { roles: ["member"], isAuthorized: false };
+  }
+}
 
 export default NextAuth(authOptions);
