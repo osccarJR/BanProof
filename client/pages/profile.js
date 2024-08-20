@@ -17,13 +17,13 @@ export default function ProfilePage() {
     useEffect(() => {
         if (!session) {
             router.push('/');  // Redirige si no está autenticado
-        }
+        } 
     }, [session]);
 
     if (!session) {
         return <p>Cargando...</p>;  // Mostrar un mensaje de carga
     }
-
+    
     return (
         <div className={styles.profileContainer}>
             {/* Barra de Navegación similar a la de index.js */}
@@ -47,7 +47,8 @@ export default function ProfilePage() {
                         <p><strong>Nombre:</strong> {session.user.name}</p>
                         <p><strong>Tag de Discord:</strong> {session.user.tag ? session.user.tag : "Sin Tag"}</p>
                         <p><strong>Email:</strong> {session.user.email ? session.user.email : "Correo no disponible"}</p>
-                        <p><strong>Rol:</strong> {session.user.role ? session.user.role : "Sin Rol"}</p>
+                        <p><strong>Rol:</strong> {session?.roles?.length > 0 ? session.roles[1] : "Sin Rol"}</p>
+                        
                     </div>
                 </div>
                 <div className={styles.profileActions}>
