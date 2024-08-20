@@ -2,6 +2,7 @@ import { SessionProvider, useSession } from "next-auth/react";
 import { useRouter } from 'next/router';
 import '../styles/globals.css';
 import '../styles/loginpage.css';
+import '../styles/staff/profile.module.css';
 
 function Auth({ children }) {
     const { data: session, status } = useSession();

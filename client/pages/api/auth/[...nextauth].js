@@ -1,8 +1,7 @@
 import NextAuth from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 
-
-const scopes = ["identify", "guilds"].join(" ");
+const scopes = ["identify", "email", "guilds"].join(" "); // Incluye 'email' en los alcances
 
 export const authOptions = {
   session: {
@@ -20,7 +19,7 @@ export const authOptions = {
       profile: async (profile, tokens) => {
         let isAuthorized = false;
         let role = "member";
-        
+
         const response = await fetch("https://discord.com/api/users/@me/guilds", {
           headers: {
             Authorization: `Bearer ${tokens.access_token}`,
@@ -28,26 +27,20 @@ export const authOptions = {
         });
 
         const guilds = await response.json();
-
-       
         const targetGuild = guilds.find(guild => guild.id === process.env.DISCORD_GUILD_ID);
 
         if (targetGuild) {
-        
-        
-          
           const memberResponse = await fetch(
-            `https://discord.com/api/users/@me/guilds/${process.env.DISCORD_GUILD_ID}/member`,
-            {
-              headers: {
-                Authorization: `Bearer ${tokens.access_token}`,
-              },
-            }
+              `https://discord.com/api/users/@me/guilds/${process.env.DISCORD_GUILD_ID}/member`,
+              {
+                headers: {
+                  Authorization: `Bearer ${tokens.access_token}`,
+                },
+              }
           );
 
           const memberData = await memberResponse.json();
-          // Roles: *, **, y Support Team
-          const allowedRoles = ['934220641727549490','941000828511215636','940339724118286399',]
+          const allowedRoles = ['934220641727549490', '941000828511215636', '940339724118286399'];
           const hasAllowedRole = memberData.roles.some(role => allowedRoles.includes(role));
           isAuthorized = hasAllowedRole;
 
@@ -56,17 +49,15 @@ export const authOptions = {
           } else if(memberData.roles.includes('940339724118286399')){
             role = "staff";
           }
-          
         }
 
         return {
           id: profile.id,
           name: profile.username,
-          email: profile.email,
+          email: profile.email, // Asegúrate de que el correo electrónico se extrae correctamente
           image: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png`,
           isAuthorized: isAuthorized,
           role: role,
-          
         };
       },
     }),
@@ -75,11 +66,8 @@ export const authOptions = {
   callbacks: {
     signIn: async ({ user, account, profile }) => {
       if (account.provider === "discord") {
-
         return user.isAuthorized;
       }
-
-      
       return true;
     },
 
@@ -87,7 +75,7 @@ export const authOptions = {
       if (user) {
         token.id = user.id;
         token.name = user.name;
-        token.email = user.email;
+        token.email = user.email; // Asegúrate de que el correo electrónico esté en el token
         token.image = user.image;
         token.isAuthorized = user.isAuthorized;
         token.role = user.role;
@@ -99,12 +87,11 @@ export const authOptions = {
     session: async ({ session, token }) => {
       session.id = token.id;
       session.name = token.name;
-      session.email = token.email;
+      session.email = token.email; // Asegúrate de que el correo electrónico esté en la sesión
       session.image = token.image;
       session.isAuthorized = token.isAuthorized;
       session.role = token.role;
 
-      
       return session;
     },
   },

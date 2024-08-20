@@ -1,0 +1,204 @@
+/* Contenedor específico para la página de perfil */
+.profileContainer {
+    min-height: 100vh;
+    width: 100vw;
+    background-color: #000;
+    background-image: radial-gradient(circle at top left, #0b0b0b, transparent),
+    radial-gradient(circle at bottom right, #000000, transparent);
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Estilos específicos para el contenedor del perfil */
+.profilePage {
+    background-color: rgba(37, 37, 37, 0.5); /* Fondo del contenedor negro con opacidad */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Borde sutil */
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    color: #fff;
+    position: relative;
+    animation: rainbowShadow 3s infinite alternate; /* Aplica la animación de arco iris */
+}
+
+/* Animación de box-shadow con efecto rainbow */
+@keyframes rainbowShadow {
+    0% {
+        box-shadow: 0 0 20px rgb(255, 0, 0), 0 0 10px rgb(255, 127, 0); /* Rojo, Naranja */
+    }
+    25% {
+        box-shadow: 0 0 20px rgb(255, 255, 0), 0 0 10px rgb(0, 255, 0); /* Amarillo, Verde */
+    }
+    50% {
+        box-shadow: 0 0 20px rgb(0, 0, 255), 0 0 10px rgb(75, 0, 130); /* Azul, Índigo */
+    }
+    75% {
+        box-shadow: 0 0 20px rgb(143, 0, 255), 0 0 10px rgb(255, 0, 0); /* Violeta, Rojo */
+    }
+    100% {
+        box-shadow: 0 0 20px rgb(255, 0, 0), 0 0 10px rgb(255, 127, 0); /* Rojo, Naranja */
+    }
+}
+
+/* Contenedor que agrupa la imagen y la información del perfil */
+.profileHeader {
+    display: flex; /* Usamos flexbox para colocar los elementos en línea horizontal */
+    align-items: flex-start; /* Alinea la imagen y la información al principio verticalmente */
+    margin-bottom: 20px;
+}
+
+/* Estilos para alinear las etiquetas y valores en una columna */
+.profileInfo {
+    display: flex;
+    flex-direction: column; /* Organiza la información en una columna */
+    margin-left: 20px; /* Añadimos margen izquierdo para separar del avatar */
+}
+
+/* Estilos para las etiquetas y valores */
+.profileInfo p {
+    margin: 5px 0;
+    display: flex;
+    align-items: center; /* Alinea verticalmente los valores */
+    justify-content: flex-start; /* Asegura que el contenido esté alineado a la izquierda */
+}
+/* Opcional: Darle estilo a las etiquetas */
+.profileInfo p strong {
+    min-width: 10px; /* Ancho mínimo para las etiquetas, puedes ajustarlo */
+    display: inline-block; /* Asegura que las etiquetas se alineen a la izquierda */
+    text-align: left; /* Alinea el texto de las etiquetas a la izquierda */
+    padding-right: 9px; /* Reduce el espacio entre la etiqueta y el valor */
+    color: #00ffc3; /* Puedes ajustar el color de las etiquetas aquí */
+}
+
+.profilePic {
+    border-radius: 50%;
+    border: 4px solid #00ffc3;
+    transition: transform 0.3s ease-in-out;
+}
+
+.profilePic:hover {
+    transform: scale(1.1);
+}
+
+.profileActions {
+    text-align: center;
+}
+
+.editButton {
+    background-color: #00ffc3;
+    color: #1f1c2c;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.1em;
+}
+
+.editButton:hover {
+    background-color: #00e6b3;
+}
+
+/* Título */
+.title {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #00ffc3;
+    text-shadow: 0 0 10px #00ffc3;
+    text-align: center;
+}
+/* Barra de Navegación */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #171717;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.logo {
+    height: 50px;
+    cursor: pointer;
+}
+
+.navLinks {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.navLinks a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2em;
+}
+
+.navLinks a:hover {
+    text-decoration: underline;
+}
+
+.profileMenu {
+    position: relative;
+}
+
+.dropdownMenu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #1e1e1e;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.menuItem {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.menuItem:hover {
+    background-color: #444;
+}
+
+.profilePic {
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.login {
+    background-color: #00ffc3;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.login:hover {
+    background-color: #00e6b3;
+}
+
+/* Ajustes adicionales para el contenedor de perfil */
+.profileContainer {
+    padding-top: 60px; /* Añade un padding para que no se superponga la navbar */
+}
+
+/* Resto de tus estilos aquí... */
+
