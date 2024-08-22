@@ -5,6 +5,15 @@ const punishmentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  punishmentType: {
+    type: String,
+    enum: ['warn', 'mute', 'kick', 'ban'],
+    required: true,
+  },
+  punishmentId: {
+    type: String,
+    required: true,
+  },
   proofType: {
     type: String,
     enum: ['url', 'video', 'image'],

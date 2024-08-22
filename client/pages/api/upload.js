@@ -5,14 +5,16 @@ export default async function handler(req, res) {
     await connectToDatabase();
 
     if(req.method === 'POST') {
-        const { userId, proofType, proofContent } = req.body;
+        const { userId, proofType, proofContent, punishmentId, punishmentType } = req.body;
 
-        if(!userId || !proofType || !proofContent) {
+        if(!userId || !proofType || !proofContent || !punishmentId || !punishmentType) {
             return res.status(400).json({ error: 'Faltan campos obligatorios' });
         }
 
         const punishment = new Punishment({
             userId,
+            punishmentType,
+            punishmentId,
             proofType,
             proofContent,
         });
