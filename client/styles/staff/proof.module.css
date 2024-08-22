@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #121212;
+    padding: 20px;
+}
+
+.punishmentContainer {
+    background-color: #1e1e1e;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 100%;
+    color: #e0e0e0;
+}
+
+.punishmentContainer h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.punishmentContainer p {
+    font-size: 18px;
+    margin: 10px 0;
+    color: #bbbbbb;
+}
+
+.punishmentContainer p strong {
+    color: #ffffff;
+}
+
+.loading {
+    font-size: 20px;
+    color: #777;
+    text-align: center;
+    margin-top: 50px;
+}

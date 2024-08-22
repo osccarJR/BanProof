@@ -1,13 +1,12 @@
 import React from 'react';
-
+import styles from '../../../styles/staff/proof.module.css';
 const ProofDetail = ({ proofData }) => {
     if (!proofData) {
-        return <div>Cargando...</div>;
+        return <div className={styles.loading}>Cargando...</div>;
     }
 
-    proofData.type = proofData.type.replace("s", "");
-    proofData.type = proofData.type.charAt(0).toUpperCase() + proofData.type.slice(1);
-
+    const formattedType = proofData.type.charAt(0).toUpperCase() + proofData.type.slice(1).replace('s', '');
+    
     /*
       Cosas que podes obtener de la sancion
       proofData.type
@@ -30,32 +29,28 @@ const ProofDetail = ({ proofData }) => {
       proofData.active
     */
     
-    let time = new Date(proofData.time);
-    let until = new Date(proofData.until);
-    let duration;
-    if (proofData.time == 0) {
-       duration = "Permanente";
-    }
-    if (proofData.until == 0) {
-        duration = "Permanente";
-    }
-    if (proofData.time != 0 && proofData.until != 0) {
-        duration = until - time;
-        duration = Math.floor(duration / 1000 / 60 / 60 / 24) + " días";
-    }
+   
 
-
+      const time = proofData.time ? new Date(proofData.time).toLocaleString() : 'N/A';
+      const until = proofData.until ? new Date(proofData.until).toLocaleString() : 'Permanente';
+      const duration = (proofData.time && proofData.until) 
+      ? `${Math.floor((new Date(proofData.until) - new Date(proofData.time)) / (1000 * 60 * 60 * 24))} días`
+      : 'Permanente';
+  
 
     return (
-        <div>
-            <h1>Detalles de sancion</h1>
-            <p><strong>Tipo de Sancion:</strong> {proofData.type}</p>
-            <p><strong>ID:</strong> {proofData.id}</p>
-            <p><strong>Usuario sancionado:</strong> {proofData.name}</p>
-            <p><strong>UUID del usuario:</strong> {proofData.uuid}</p>
-            <p><strong>Sancionado por:</strong> {proofData.banned_by_name}</p>
-            <p><strong>Duracion: </strong> {duration}</p>
-            <p></p>
+        <div className={styles.container}>
+             <div className={styles.punishmentContainer}>
+                <h1>Detalles de sanción</h1>
+                <p><strong>Tipo de Sanción:</strong> {formattedType}</p>
+                <p><strong>ID:</strong> {proofData.id}</p>
+                <p><strong>Usuario sancionado:</strong> {proofData.name}</p>
+                <p><strong>UUID del usuario:</strong> {proofData.uuid}</p>
+                <p><strong>Sancionado por:</strong> {proofData.banned_by_name}</p>
+                <p><strong>Duración:</strong> {duration}</p>
+                <p><strong>Fecha de inicio:</strong> {time}</p>     
+                <p><strong>Fecha de finalización:</strong> {until}</p>           
+            </div>
 
         </div>
     );
