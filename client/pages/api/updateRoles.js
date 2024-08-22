@@ -18,9 +18,9 @@ export default async function handler(req, res) {
     const data = await response.json();
     const userRoles = data.roles;
     let roles = [];
-    if (userRoles.includes('934220641727549490') || memberData.roles.includes('941000828511215636')) {
+    if (userRoles.includes('934220641727549490') || userRoles.includes('941000828511215636')) {
       roles.push("management");
-    } else if (memberData.roles.includes('940339724118286399')) {
+    } else if (userRoles.includes('940339724118286399')) {
       roles.push("staff");
     }
     const rangos = {
