@@ -15,9 +15,9 @@ export default function Home() {
     return (
         <div className="home-page">
             <Head>
-                <title>Watones Network</title>
+                <title>Watones Network - Ban Proof</title>
                 <meta name="description" content="Watones Network - El servidor más duro" />
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/watones_logo.ico" />
             </Head>
 
             <header className="navbar">
