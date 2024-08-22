@@ -17,7 +17,7 @@ export const authOptions = {
       },
 
       profile: async (profile, tokens) => {
-        const { roles, isAuthorized } = await fetchRoles(tokens.access_token);
+        const { roles, isAuthorized } = await fetchRolesFirstTime(tokens.access_token);
 
         return {
           id: profile.id,
@@ -35,7 +35,7 @@ export const authOptions = {
   callbacks: {
     signIn: async ({ user, account, profile }) => {
       if (account.provider === "discord") {
-        return user.isAuthorized;
+
       }
       return true;
     },
@@ -49,7 +49,7 @@ export const authOptions = {
         token.isAuthorized = user.isAuthorized;
         token.roles = user.roles || ["member"];
         token.access_token = user.access_token;
-        token.lastRoleFetch = Date.now(); 
+        token.lastRoleFetch = Date.now();
       }
 
       return token;
@@ -63,11 +63,11 @@ export const authOptions = {
       session.isAuthorized = token.isAuthorized;
       session.roles = token.roles || ["member"];
       session.access_token = token.access_token;
-      
+
       const THIRTY_MINUTES = 30 * 60 * 1000;
       if (Date.now() - token.lastRoleFetch > THIRTY_MINUTES) {
         const { roles, isAuthorized } = await fetchRoles(token.access_token);
-        
+
         session.roles = roles;
         session.isAuthorized = isAuthorized;
 
@@ -81,6 +81,51 @@ export const authOptions = {
     },
   },
 };
+
+async function fetchRolesFirstTime(accessToken) {
+  try {
+    const response = await fetch(
+      `https://discord.com/api/users/@me/guilds/${process.env.DISCORD_GUILD_ID}/member`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    const data = await response.json();
+    const userRoles = data.roles;
+    let roles = [];
+    if (userRoles.includes('934220641727549490') || memberData.roles.includes('941000828511215636')) {
+      roles.push("management");
+    } else if (memberData.roles.includes('940339724118286399')) {
+      roles.push("staff");
+    }
+    const rangos = {
+      "Founder": "934105741420273765",
+      "Owner": "1045127188128747560",
+      "Manager": "1144741012145717339",
+      "Admin": "1147977563105394799",
+      "JrAdmin": "1214074487469899817",
+      "SrMod": "1147977564837642376",
+      "Moderator+": "1213962495333761105",
+      "Moderator": "1147977568193085581",
+      "Helper": "1147977652993540237"
+    }
+    for (const rango in rangos) {
+      if (userRoles.includes(rangos[rango])) {
+        roles.push(rango);
+        break;
+      }
+    }
+
+    return { roles, isAuthorized: roles.includes("management") || roles.includes("staff") };
+  } catch (error) {
+    console.error("Error al obtener los roles:", error);
+    res.status(500).json({ error: 'Error al obtener los roles' });
+  }
+
+
+}
 
 async function fetchRoles(accessToken) {
   try {
