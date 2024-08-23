@@ -94,6 +94,10 @@ async function fetchRoles(accessToken) {
     );
     const data = await response.json();
     const userRoles = data.roles;
+    if(!userRoles){
+      console.log("No se encontraron roles");
+      return { roles: [], isAuthorized: false };
+    } 
     let roles = [];
     if (userRoles.includes('934220641727549490') || userRoles.includes('941000828511215636')) {
       roles.push("management");
@@ -121,7 +125,7 @@ async function fetchRoles(accessToken) {
     return { roles, isAuthorized: roles.includes("management") || roles.includes("staff") };
   } catch (error) {
     console.error("Error al obtener los roles:", error);
-    res.status(500).json({ error: 'Error al obtener los roles' });
+    response.status(500).json({ error: 'Error al obtener los roles' });
   }
 
 
