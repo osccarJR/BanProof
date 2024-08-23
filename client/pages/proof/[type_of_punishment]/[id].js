@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../../styles/staff/proof.module.css';
+import styles from '../../../styles/staff/proof.punishment.module.css';
 const ProofDetail = ({ proofData }) => {
     if (!proofData) {
         return <div className={styles.loading}>Cargando...</div>;

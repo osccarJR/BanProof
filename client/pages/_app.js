@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import '../styles/globals.css';
 import '../styles/loginpage.css';
 import '../styles/staff/profile.module.css';
+import '../styles/staff/proof.punishment.module.css';
 import '../styles/staff/proof.module.css';
 
 function Auth({ children }) {
