@@ -17,7 +17,7 @@ export const authOptions = {
       },
 
       profile: async (profile, tokens) => {
-        const { roles, isAuthorized } = await fetchRolesFirstTime(tokens.access_token);
+        const { roles, isAuthorized } = await fetchRoles(tokens.access_token);
 
         return {
           id: profile.id,
@@ -82,7 +82,7 @@ export const authOptions = {
   },
 };
 
-async function fetchRolesFirstTime(accessToken) {
+async function fetchRoles(accessToken) {
   try {
     const response = await fetch(
       `https://discord.com/api/users/@me/guilds/${process.env.DISCORD_GUILD_ID}/member`,
@@ -127,28 +127,6 @@ async function fetchRolesFirstTime(accessToken) {
 
 }
 
-async function fetchRoles(accessToken) {
-  try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/updateRoles`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-      },
-    });
 
-    if (!response.ok) {
-      throw new Error('Ocurrio un fallo al obtener los roles');
-    }
-
-    const data = await response.json();
-    const roles = data.roles || ["member"];
-    const isAuthorized = roles.includes("management") || roles.includes("staff");
-    return { roles, isAuthorized };
-  } catch (error) {
-    console.error('Error al obtener los roles:', error);
-    return { roles: ["member"], isAuthorized: false };
-  }
-}
 
 export default NextAuth(authOptions);
