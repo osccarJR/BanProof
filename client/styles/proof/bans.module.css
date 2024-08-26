@@ -1,0 +1,87 @@
+.container {
+    padding: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+.title {
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table th, .table td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.table th {
+    background-color: #f7f7f7;
+    color: #333;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.table tr {
+    transition: background-color 0.3s ease;
+}
+
+.table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+.player-cell {
+    display: flex;
+    align-items: center;
+}
+
+.player-avatar {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.banned-by {
+    display: flex;
+    align-items: center;
+}
+
+.banned-by-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.expires {
+    color: #999;
+    font-size: 0.9em;
+}
+
+.expires.expired {
+    color: red;
+}
