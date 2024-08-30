@@ -7,6 +7,9 @@ export default async function handler(req, res) {
     if(req.method === 'POST') {
         const { userId, proofType, proofContent, punishmentId, punishmentType } = req.body;
 
+
+        console.log(req.body);
+        
         if(!userId || !proofType || !proofContent || !punishmentId || !punishmentType) {
             return res.status(400).json({ error: 'Faltan campos obligatorios' });
         }

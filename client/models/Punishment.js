@@ -20,7 +20,7 @@ const punishmentSchema = new mongoose.Schema({
     required: true,
   },
   proofContent: {
-    type: String,
+    type: [String],
     required: true,
   },
   timestamp: {

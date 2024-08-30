@@ -97,7 +97,7 @@ export async function getServerSideProps(context) {
         }
 
         const collection = db.collection('punishments');
-        let punishmentType = type_of_punishment;
+        let punishmentType = type_of_punishment.slice(0, -1);
         
         const punishment = await collection.findOne({ punishmentId: id , punishmentType: punishmentType });
 
