@@ -5,6 +5,7 @@ import '../styles/loginpage.css';
 import '../styles/staff/profile.module.css';
 import '../styles/staff/proof.punishment.module.css';
 import '../styles/staff/proof.module.css';
+import '../styles/staff/proof.upload.module.css';
 
 function Auth({ children }) {
     const { data: session, status } = useSession();

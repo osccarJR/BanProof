@@ -33,6 +33,16 @@
     color: #ffffff;
 }
 
+.proofButton {
+    background-color: #2f2f2f;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 20px;
+}
 .loading {
     font-size: 20px;
     color: #777;
