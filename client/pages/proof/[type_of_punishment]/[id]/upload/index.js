@@ -19,7 +19,7 @@ const ProofUpload = () => {
         const urls = form.getAll('url').filter(url => url.trim() !== '');
         const currentUrl = window.location.pathname;
         const punishmentId = currentUrl.split('/')[3];
-        const punishmentType = currentUrl.split('/')[2].slice(0, -1);
+        const punishmentType = currentUrl.split('/')[2];
 
         let proofType, proofContent = [];
 

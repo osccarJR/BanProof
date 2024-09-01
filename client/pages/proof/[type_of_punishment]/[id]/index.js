@@ -61,7 +61,7 @@ const ProofDetail = ({ proofData, hasProof, punishmentType }) => {
                 <p><strong>Origen:</strong> {proofData.server_origin || 'N/A'}</p>
                 <p><strong>Silenciosa:</strong> {silent ? 'Si' : 'No'}</p>
                 <p><strong>Fecha Removida:</strong> {proofData.removed_by_date ? new Date(proofData.removed_by_date).toLocaleString() : 'N/A'}</p>
-                <button className={styles.proofButton} onClick={() => window.location.href = `/proof/${punishmentType}/${proofData.id}/upload`}>{hasProof ? 'Ver Pruebas' : 'Click para agregar pruebas'}</button>
+                <button className={styles.proofButton} onClick={() =>{ hasProof ? window.location.href = `/proof/${punishmentType}/${proofData.id}/view`: window.location.href = `/proof/${punishmentType}/${proofData.id}/upload`  } }>{hasProof ? 'Ver Pruebas' : 'Click para agregar pruebas'}</button>
             </div>
         </div>
     );
