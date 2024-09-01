@@ -15,10 +15,10 @@ const ProofDetail = ({ proofData }) => {
         <div>
             <h1>Pruebas de sancion id: {proofData.punishmentId}</h1>
             {proofType === "image" && (
-                <img src={proofContent} alt="Prueba" style={{ maxWidth: "100%" }} />
+                <img src={proofContent} alt="Prueba" style={{ maxWidth: "30%" }} />
             )}
             {proofType === "video" && (
-                <video controls style={{ maxWidth: "100%" }}>
+                <video controls style={{ maxWidth: "30%" }}>
                     <source src={proofContent} type="video/mp4" />
                     Tu buscador no soporta videos.
                 </video>
@@ -40,7 +40,7 @@ export async function getServerSideProps(context) {
 
     const collection = db.collection("punishments");
 
-    let punishmentType = type_of_punishment.slice(0, -1); 
+    let punishmentType = type_of_punishment;
 
     const proofData = await collection.findOne({
         punishmentId: id,
