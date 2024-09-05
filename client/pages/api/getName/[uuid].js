@@ -2,11 +2,9 @@ import mysql from 'mysql2/promise';
 
 const config = require('../../../config.json');
 
-let punishmentType;
+const { getSession } = require('next-auth/react');
 
-const handler = async (req, res) => {
-
-    const punishmentType = req.query.punishmentType;
+export default async function handler(req, res) {
 
     const pool = mysql.createPool({
         host: config.db_host,
@@ -19,31 +17,23 @@ const handler = async (req, res) => {
         queueLimit: 0
     });
 
+    const { uuid } = req.query;
+    
+
     try {
+        const [row] = await pool.execute(`SELECT name FROM litebans_history WHERE uuid = ?`, [uuid]);
+        res.json(row[0]);
+        console.log(row[0]);
 
 
-        const [rows] = await pool.execute(`SELECT * FROM litebans_${punishmentType}s ORDER BY time DESC`);
-        res.status(200).json(rows);
-    } catch (error) {
+    } catch (error){
         res.status(500).json({ error: 'Error obteniendo informacion de la base de datos' });
         console.log(error);
     } finally {
         pool.end();
     }
-};
 
 
-export async function getServerSideProps(context) {
-
-    punishmentType = context.params.punishmentType;
-
-    return {
-        props: {
-            punishmentType
-        }
-    }
 }
-
-export default handler;
 
 

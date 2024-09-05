@@ -25,7 +25,7 @@ const formatDuration = (start, end) => {
     }
 }
 
-const ProofDetail = ({ proofData, hasProof, punishmentType }) => {
+const ProofDetail = ({ proofData, hasProof, punishmentType, name }) => {
     if (!proofData) {
         return <div className={styles.loading}>Cargando...</div>;
     }
@@ -41,12 +41,14 @@ const ProofDetail = ({ proofData, hasProof, punishmentType }) => {
     const until = formatTimestamp(proofData.until);
     const duration = formatDuration(proofData.time, proofData.until);
 
+    
+
     return (
         <div className={styles.container}>
             <div className={styles.punishmentContainer}>
                 <h1>Detalles de sanción</h1>
                 <p><strong>ID:</strong> {proofData.id}</p>
-                <p><strong>Usuario sancionado:</strong> {proofData.banned_by_name || 'N/A'}</p>
+                <p><strong>Usuario sancionado:</strong> {name || 'N/A'}</p>
                 <p><strong>UUID del usuario:</strong> {proofData.uuid}</p>
                 <p><strong>Sancionado por:</strong> {proofData.banned_by_name || 'N/A'}</p>
                 <p><strong>Duración:</strong> {duration}</p>
@@ -102,13 +104,15 @@ export async function getServerSideProps(context) {
         const punishment = await collection.findOne({ punishmentId: id , punishmentType: punishmentType });
 
         const hasProof = punishment !== null;
-
+        let name = await fetch(`http://localhost:3000/api/getName/${proofData.uuid}`).then(res => res.json());
+        name = name?.name || null
+        
         return {
             props: {
                 proofData,
                 hasProof,
-                punishmentType
-
+                punishmentType,
+                name
             },
         };
     } catch (error) {

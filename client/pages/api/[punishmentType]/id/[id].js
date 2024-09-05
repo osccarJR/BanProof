@@ -4,7 +4,7 @@ const config = require('../../../../config.json');
 
 let punishmentType;
 
-const { getSession } = require('next-auth/client');
+const { getSession } = require('next-auth/react');
 
 export default async function handler(req, res) {
 
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 
     try {
 
-        const [row] = await pool.execute(`SELECT * FROM litebans_${punishmentType} WHERE id = ?`, [id]);
+        const [row] = await pool.execute(`SELECT * FROM litebans_${punishmentType}s WHERE id = ?`, [id]);
         res.json(row[0]);
     } catch (error) {
         res.status(500).json({ error: 'Error obteniendo informacion de la base de datos' });

@@ -1,0 +1,95 @@
+/* General styling for the container */
+.container {
+    padding: 20px;
+    width: 100%;
+    min-height: 100vh;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #000000;
+}
+
+/* Filter button container */
+.filterButtons {
+    margin-bottom: 20px;
+}
+
+/* Style for filter buttons */
+.filterButton {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for filter buttons */
+.filterButton:hover {
+    background-color: #0056b3;
+}
+
+/* Active filter button */
+.filterButtonActive {
+    background-color: #0056b3;
+}
+
+/* Style for table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+/* Table header */
+.table thead th {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 2px solid #0056b3;
+}
+
+/* Table rows */
+.table tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Table cells */
+.table tbody td {
+    padding: 10px;
+}
+
+/* Hover effect for table rows */
+.table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+    .table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .table thead,
+    .table tbody,
+    .table th,
+    .table td,
+    .table tr {
+        display: block;
+    }
+
+    .table th {
+        position: sticky;
+        top: 0;
+        background-color: #007bff;
+    }
+}
