@@ -22,7 +22,7 @@ const handler = async (req, res) => {
     try {
 
 
-        const [rows] = await pool.execute(`SELECT * FROM litebans_${punishmentType} ORDER BY time DESC`);
+        const [rows] = await pool.execute(`SELECT * FROM litebans_${punishmentType}s ORDER BY time DESC`);
         res.status(200).json(rows);
     } catch (error) {
         res.status(500).json({ error: 'Error obteniendo informacion de la base de datos' });
