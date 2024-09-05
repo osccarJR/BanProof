@@ -50,7 +50,7 @@ export default function Manager({ session, punishmentProofs }) {
                 );
 
                 setPunishments(detailedPunishments);
-                
+
             } catch (error) {
                 console.error("Error fetching punishment details:", error);
             }
@@ -124,20 +124,18 @@ export default function Manager({ session, punishmentProofs }) {
                             <td>{punishment.username}</td>
                             <td>{punishment.reason}</td>
                             <td>{formatTimestamp(punishment.time)}</td>
-                            <td>{formatDuration(punishment.time,punishment.until)}</td>
+                            <td>{formatDuration(punishment.time, punishment.until)}</td>
                             <td><button className={styles.proofButton} onClick={() => window.location.href = `/proof/${punishment.type}/${punishment.id}/view`}>Click Para acceder a las pruebas</button></td>
-                            
+
                             <td>
                                 <button className={styles.proofButton} onClick={() => window.location.href = `/proof/${punishment.type}/${punishment.id}/edit`}>Editar Pruebas</button>
                                 <button className={styles.proofButton} onClick={() => window.location.href = `/proof/${punishment.type}/${punishment.id}/delete`}>Eliminar Pruebas</button>
                             </td>
                             <td>
-                            { /* Add checkmark circle and cross circle for proof rating  with checkbox*/}
-
-
+                                
+                                
+                                
                             </td>
-
-                    
                         </tr>
                     ))}
                 </tbody>
@@ -161,13 +159,13 @@ export async function getServerSideProps(context) {
     const { db } = await connectToDatabase();
 
     const punishmentProofs = await db.collection("punishments").find({}).toArray();
-    
+
 
     return {
         props: {
             session,
             punishmentProofs: JSON.parse(JSON.stringify(punishmentProofs)),
-            
+
         },
     };
 }

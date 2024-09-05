@@ -8,7 +8,7 @@ const { getSession } = require('next-auth/react');
 
 export default async function handler(req, res) {
 
-    const punishmentType = req.query.punishmentType;
+    let punishmentType = req.query.punishmentType;
 
     const pool = mysql.createPool({
         host: config.db_host,
@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     try {
         if(punishmentType.charAt(punishmentType.length - 1) === 's') {
             punishmentType = punishmentType.slice(0, -1);
-            
+
         }
 
         const [row] = await pool.execute(`SELECT * FROM litebans_${punishmentType}s WHERE id = ?`, [id]);

@@ -7,6 +7,7 @@ import '../styles/staff/proof.punishment.module.css';
 import '../styles/staff/proof.module.css';
 import '../styles/staff/proof.upload.module.css';
 import '../styles/manager/manager.module.css';
+import { NextUIProvider } from "@nextui-org/react";
 
 function Auth({ children }) {
     const { data: session, status } = useSession();
@@ -24,11 +25,13 @@ function Auth({ children }) {
 
 function MyApp({ Component, pageProps }) {
     return (
-        <SessionProvider session={pageProps.session}>
-            <Auth>
-                <Component {...pageProps} />
-            </Auth>
-        </SessionProvider>
+        <NextUIProvider>
+            <SessionProvider session={pageProps.session}>
+                <Auth>
+                    <Component {...pageProps} />
+                </Auth>
+            </SessionProvider>
+        </NextUIProvider>
     );
 }
 
