@@ -6,7 +6,7 @@ let punishmentType;
 
 const handler = async (req, res) => {
 
-    const punishmentType = req.query.punishmentType;
+    let punishmentType = req.query.punishmentType;
 
     const pool = mysql.createPool({
         host: config.db_host,
@@ -21,7 +21,9 @@ const handler = async (req, res) => {
 
     try {
 
-
+        if(punishmentType.charAt(punishmentType.length - 1) === 's') {
+            punishmentType = punishmentType.slice(0, -1);
+        }
         const [rows] = await pool.execute(`SELECT * FROM litebans_${punishmentType}s ORDER BY time DESC`);
         res.status(200).json(rows);
     } catch (error) {

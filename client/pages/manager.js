@@ -8,6 +8,27 @@ const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
+const formatDuration = (start, end) => {
+    if (!start || !end) return 'N/A';
+
+    if ((end - start) / (1000 * 60 * 60 * 24) >= 1) {
+        return `${Math.floor((end - start) / (1000 * 60 * 60 * 24))} días`;
+    } else if ((end - start) / (1000 * 60 * 60) >= 1) {
+        return `${Math.floor((end - start) / (1000 * 60 * 60))} horas`;
+    } else if ((end - start) / (1000 * 60) >= 1) {
+        return `${Math.floor((end - start) / (1000 * 60))} minutos`;
+    } else if ((end - start) / 1000 >= 1) {
+        return `${Math.floor((end - start) / 1000)} segundos`;
+    } else {
+        return 'N/A';
+    }
+}
+
+const formatTimestamp = (timestamp) => {
+    if (!timestamp) return 'N/A';
+    return new Date(timestamp).toLocaleString();
+};
+
 export default function Manager({ session, punishmentProofs }) {
     const [punishments, setPunishments] = useState([]);
     const [filter, setFilter] = useState("all");
@@ -29,7 +50,7 @@ export default function Manager({ session, punishmentProofs }) {
                 );
 
                 setPunishments(detailedPunishments);
-                console.log(detailedPunishments);
+                
             } catch (error) {
                 console.error("Error fetching punishment details:", error);
             }
@@ -42,7 +63,7 @@ export default function Manager({ session, punishmentProofs }) {
         setFilter(type);
     };
 
-    if (!session || !session.roles.includes("management")) {
+    if (!session || !(session.roles.includes("management") || !session.roles.includes("Dev"))) {
         return <p>Acceso no autorizado. Por favor, inicia sesión con una cuenta de administrador.</p>;
     }
 
@@ -84,12 +105,15 @@ export default function Manager({ session, punishmentProofs }) {
             <table className={styles.table}>
                 <thead>
                     <tr>
-                        <th>Punishment Type</th>
-                        <th>Punishment ID</th>
-                        <th>User</th>
-                        <th>Reason</th>
-                        <th>Date</th>
-                        <th>Duration</th>
+                        <th>Tipo de sancion</th>
+                        <th>ID</th>
+                        <th>Usuario Sancionado</th>
+                        <th>Razon</th>
+                        <th>Fecha</th>
+                        <th>Duracion</th>
+                        <th>Pruebas</th>
+                        <th>Acciones</th>
+                        <th>Validas?</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,8 +123,21 @@ export default function Manager({ session, punishmentProofs }) {
                             <td>{punishment.id}</td>
                             <td>{punishment.username}</td>
                             <td>{punishment.reason}</td>
-                            <td>{punishment.date}</td>
-                            <td>{punishment.duration}</td>
+                            <td>{formatTimestamp(punishment.time)}</td>
+                            <td>{formatDuration(punishment.time,punishment.until)}</td>
+                            <td><button className={styles.proofButton} onClick={() => window.location.href = `/proof/${punishment.type}/${punishment.id}/view`}>Click Para acceder a las pruebas</button></td>
+                            
+                            <td>
+                                <button className={styles.proofButton} onClick={() => window.location.href = `/proof/${punishment.type}/${punishment.id}/edit`}>Editar Pruebas</button>
+                                <button className={styles.proofButton} onClick={() => window.location.href = `/proof/${punishment.type}/${punishment.id}/delete`}>Eliminar Pruebas</button>
+                            </td>
+                            <td>
+                            { /* Add checkmark circle and cross circle for proof rating  with checkbox*/}
+
+
+                            </td>
+
+                    
                         </tr>
                     ))}
                 </tbody>

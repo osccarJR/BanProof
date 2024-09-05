@@ -7,9 +7,11 @@ export default function BansPage() {
     const router = useRouter();
 
     useEffect(() => {
-        fetch('/api/bans')
-            .then((res) => res.json())
-            .then((data) => setBans(data));
+        const fetchPunishments = async () => {
+            let data = await fetch(`/api/bans`).then((res) =>res.json());
+            setBans(data);                
+        };
+        fetchPunishments();
     }, []);
 
     const handleRowClick = (banId) => {
@@ -31,32 +33,32 @@ export default function BansPage() {
             <div className={styles.tableWrapper}>
                 <table className={styles.table}>
                     <thead>
-                    <tr>
-                        <th>Player</th>
-                        <th>Banned By</th>
-                        <th>Razon</th>
-                        <th>Fecha</th>
-                        <th>Expira</th>
-                    </tr>
+                        <tr>
+                            <th>Player</th>
+                            <th>Banned By</th>
+                            <th>Razon</th>
+                            <th>Fecha</th>
+                            <th>Expira</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {bans.map((ban) => (
-                        <tr key={ban.id} className={styles.tableRow} onClick={() => handleRowClick(ban.id)}>
-                            <td className={styles.playerCell}>
-                                <img src={`/api/player/avatar/${ban.name}`} alt={ban.name} className={styles.playerAvatar} />
-                                {ban.name}
-                            </td>
-                            <td className={styles.bannedBy}>
-                                <img src={`/icons/staff/${ban.banned_by_name}.png`} className={styles.bannedByIcon} />
-                                {ban.banned_by_name}
-                            </td>
-                            <td>{ban.reason}</td>
-                            <td>{new Date(ban.time).toLocaleString()}</td>
-                            <td className={`${styles.expires} ${ban.until && ban.until < Date.now() ? styles.expired : ''}`}>
-                                {ban.until ? new Date(ban.until).toLocaleString() : 'Permanente'}
-                            </td>
-                        </tr>
-                    ))}
+                        {bans.map((ban) => (
+                            <tr key={ban.id} className={styles.tableRow} onClick={() => handleRowClick(ban.id)}>
+                                <td className={styles.playerCell}>
+                                    <img src={`/api/player/avatar/${ban.name}`} alt={ban.name} className={styles.playerAvatar} />
+                                    {ban.name}
+                                </td>
+                                <td className={styles.bannedBy}>
+                                    <img src={`/icons/staff/${ban.banned_by_name}.png`} className={styles.bannedByIcon} />
+                                    {ban.banned_by_name}
+                                </td>
+                                <td>{ban.reason}</td>
+                                <td>{new Date(ban.time).toLocaleString()}</td>
+                                <td className={`${styles.expires} ${ban.until && ban.until < Date.now() ? styles.expired : ''}`}>
+                                    {ban.until ? new Date(ban.until).toLocaleString() : 'Permanente'}
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
