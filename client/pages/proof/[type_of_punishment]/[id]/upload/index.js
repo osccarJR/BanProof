@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 const ProofUpload = () => {
     const [filePreviews, setFilePreviews] = useState([]);
     const { data: session } = useSession();
+
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
         const previews = files.map(file => URL.createObjectURL(file));
@@ -24,7 +25,7 @@ const ProofUpload = () => {
         let proofType, proofContent = [];
 
         if (files.length > 0) {
-            
+
             const uploadPromises = files.map(async (file) => {
                 const formData = new FormData();
                 formData.append('file', file);
@@ -35,7 +36,7 @@ const ProofUpload = () => {
                 });
 
                 const data = await response.json();
-                return data.fileUrl; 
+                return data.fileUrl;
             });
 
             proofContent = await Promise.all(uploadPromises);
@@ -46,7 +47,6 @@ const ProofUpload = () => {
         } else {
             return alert('Debes subir al menos un archivo o agregar una URL');
         }
-
 
         fetch('/api/upload', {
             method: 'POST',
@@ -67,18 +67,29 @@ const ProofUpload = () => {
             alert('Pruebas subidas correctamente');
             window.location.href = `/proof/${punishmentType}s/${punishmentId}`;
         }).catch((error) => {
-            console.error('Error:', error);
-            alert('Error al subir las pruebas');
-        }
+                console.error('Error:', error);
+                alert('Error al subir las pruebas');
+            }
         );
-
     };
 
     return (
         <div className={styles.container}>
+            {/* Barra de navegación */}
+            <nav className={styles.navbar}>
+                <h1>Sistema de Sanciones</h1>
+                <ul>
+                    {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+                    <li><a href="/">Inicio</a></li>
+                    {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+                    <li><a href="/proof">Sanciones</a></li>
+                </ul>
+            </nav>
+
+            {/* Contenedor de subida */}
             <div className={styles.content}>
                 <h1>Subir pruebas para la sancion</h1>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className={styles.form}>
                     <label htmlFor="file-upload" className={styles.fileUpload}>
                         Seleccionar archivos
                     </label>
@@ -89,12 +100,13 @@ const ProofUpload = () => {
                         id="file-upload"
                         multiple
                         onChange={handleFileChange}
+                        className={styles.inputFile}
                     />
-                    <p>o</p>
+                    <p className={styles.orText}>o</p>
                     <label>
-                        <input type="text" placeholder="URL" name="url" />
+                        <input type="text" placeholder="URL" name="url" className={styles.inputUrl} />
                     </label>
-                    <button type="submit">Subir</button>
+                    <button type="submit" className={styles.submitButton}>Subir</button>
                 </form>
 
                 {filePreviews.length > 0 && (

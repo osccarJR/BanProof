@@ -1,6 +1,7 @@
 import connectToDatabase from "@/lib/mongoose";
 import NextAuth from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
+
 const scopes = ["identify", "email", "guilds"].join(" "); // Incluye 'email' en los alcances
 
 export const authOptions = {
@@ -35,7 +36,7 @@ export const authOptions = {
   callbacks: {
     signIn: async ({ user, account, profile }) => {
       if (account.provider === "discord") {
-
+        // Puedes añadir más lógica aquí si es necesario.
       }
       return true;
     },
@@ -76,6 +77,8 @@ export const authOptions = {
         token.lastRoleFetch = Date.now(); // Actualiza la última vez que se obtuvieron los roles
       }
 
+      // Asegúrate de que el rol "Dev" tenga acceso completo
+      session.isAuthorized = session.isAuthorized || session.roles.includes("Dev");
 
       return session;
     },
@@ -85,36 +88,45 @@ export const authOptions = {
 async function fetchRoles(accessToken) {
   try {
     const response = await fetch(
-      `https://discord.com/api/users/@me/guilds/${process.env.DISCORD_GUILD_ID}/member`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
+        `https://discord.com/api/users/@me/guilds/${process.env.DISCORD_GUILD_ID}/member`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
     );
     const data = await response.json();
     const userRoles = data.roles;
-    if(!userRoles){
+    if (!userRoles) {
       console.log("No se encontraron roles");
       return { roles: [], isAuthorized: false };
-    } 
+    }
+
     let roles = [];
     if (userRoles.includes('934220641727549490') || userRoles.includes('941000828511215636')) {
       roles.push("management");
     } else if (userRoles.includes('940339724118286399')) {
       roles.push("staff");
     }
+
+    // Añadir rol "Dev" con autorización completa
+    if (userRoles.includes('948657394156720198')) { // ID del rol "Dev"
+      roles.push("Dev");
+    }
+
     const rangos = {
       "Founder": "934105741420273765",
       "Owner": "1045127188128747560",
+      "Dev": "948657394156720198",
       "Manager": "1144741012145717339",
       "Admin": "1147977563105394799",
       "JrAdmin": "1214074487469899817",
       "SrMod": "1147977564837642376",
       "Moderator+": "1213962495333761105",
       "Moderator": "1147977568193085581",
-      "Helper": "1147977652993540237"
-    }
+      "Helper": "1147977652993540237",
+    };
+
     for (const rango in rangos) {
       if (userRoles.includes(rangos[rango])) {
         roles.push(rango);
@@ -122,15 +134,12 @@ async function fetchRoles(accessToken) {
       }
     }
 
-    return { roles, isAuthorized: roles.includes("management") || roles.includes("staff") };
+    // Autorización para management, staff o Dev
+    return { roles, isAuthorized: roles.includes("management") || roles.includes("staff") || roles.includes("Dev") };
   } catch (error) {
     console.error("Error al obtener los roles:", error);
-    response.status(500).json({ error: 'Error al obtener los roles' });
+    return { roles: [], isAuthorized: false };
   }
-
-
 }
-
-
 
 export default NextAuth(authOptions);
