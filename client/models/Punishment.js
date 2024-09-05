@@ -27,6 +27,10 @@ const punishmentSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  isValid: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Punishment = mongoose.models.Punishment || mongoose.model('Punishment', punishmentSchema);

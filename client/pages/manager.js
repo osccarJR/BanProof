@@ -63,7 +63,7 @@ export default function Manager({ session, punishmentProofs }) {
         setFilter(type);
     };
 
-    if (!session || !(session.roles.includes("management") || !session.roles.includes("Dev"))) {
+    if (!session || !(session.roles.includes("management") || session.roles.includes("Dev"))) {
         return <p>Acceso no autorizado. Por favor, inicia sesión con una cuenta de administrador.</p>;
     }
 
@@ -161,11 +161,13 @@ export async function getServerSideProps(context) {
     const { db } = await connectToDatabase();
 
     const punishmentProofs = await db.collection("punishments").find({}).toArray();
+    
 
     return {
         props: {
             session,
-            punishmentProofs: JSON.parse(JSON.stringify(punishmentProofs))
+            punishmentProofs: JSON.parse(JSON.stringify(punishmentProofs)),
+            
         },
     };
 }

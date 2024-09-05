@@ -23,6 +23,10 @@ export default async function handler(req, res) {
     const { id } = req.query;
 
     try {
+        if(punishmentType.charAt(punishmentType.length - 1) === 's') {
+            punishmentType = punishmentType.slice(0, -1);
+            
+        }
 
         const [row] = await pool.execute(`SELECT * FROM litebans_${punishmentType}s WHERE id = ?`, [id]);
         res.json(row[0]);
