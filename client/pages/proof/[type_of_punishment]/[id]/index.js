@@ -72,6 +72,7 @@ const ProofDetail = ({ proofData, hasProof, punishmentType, name }) => {
             </div>
         </div>
     );
+
 };
 
 export async function getServerSideProps(context) {
