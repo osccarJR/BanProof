@@ -1,87 +1,141 @@
+/* Contenedor principal */
 .container {
-    padding: 20px;
-    background-color: #f4f4f4;
-    color: #333;
-    min-height: 100vh;
-    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 98vh;
+    padding: 10px;
+    background-color: #1b1b1b;
 }
 
+/* Navbar */
+.navbar {
+    width: 100%;
+    background-color: #121212;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 9px;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+}
+
+.navTitle {
+    color: #00d1ff;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.navLinks {
+    display: flex;
+    list-style: none;
+}
+
+.navLinks li {
+    margin: 0 10px;
+}
+
+.navLinks li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.navLinks li a:hover {
+    color: #00d1ff;
+}
+
+/* Título de la página */
 .title {
-    font-size: 2em;
+    font-size: 32px;
+    font-weight: bold;
     margin-bottom: 20px;
-    text-align: center;
+    color: #00d1ff;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 80px; /* Ajustar para la barra de navegación fija */
 }
 
+/* Envolver la tabla */
+.tableWrapper {
+    width: 100%;
+    max-width: 1000px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    margin-top: 30px;
+}
+
+/* Tabla principal */
 .table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
 }
 
-.table th, .table td {
-    padding: 15px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-    vertical-align: middle;
-}
-
+/* Encabezados de la tabla */
 .table th {
-    background-color: #f7f7f7;
-    color: #333;
+    background-color: #121212;
+    color: #00d1ff;
+    padding: 15px;
+    font-size: 16px;
+    text-align: left;
     text-transform: uppercase;
-    font-size: 0.9em;
-    font-weight: 600;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #00d1ff;
 }
 
-.table tr {
-    transition: background-color 0.3s ease;
+/* Filas de la tabla */
+.tableRow {
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.table tr:hover {
-    background-color: #f1f1f1;
+.tableRow:hover {
+    background-color: rgba(0, 209, 255, 0.1);
+    transform: scale(1.02);
 }
 
-.table tr:nth-child(even) {
-    background-color: #f9f9f9;
+/* Celdas de la tabla */
+.table td {
+    padding: 15px;
+    font-size: 16px;
+    color: #ddd;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.table tr:nth-child(odd) {
-    background-color: #fff;
-}
-
-.player-cell {
-    display: flex;
-    align-items: center;
-}
-
-.player-avatar {
-    width: 32px;
-    height: 32px;
+/* Avatar del jugador */
+.playerAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     margin-right: 10px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
-.banned-by {
-    display: flex;
-    align-items: center;
+/* Icono del administrador */
+.bannedByIcon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    object-fit: contain;
 }
 
-.banned-by-icon {
-    width: 24px;
-    height: 24px;
-    margin-right: 8px;
-}
-
+/* Columna de expiración */
 .expires {
-    color: #999;
-    font-size: 0.9em;
+    color: #ddd;
 }
 
-.expires.expired {
+.expired {
     color: red;
+}
+
+/* Hover en expiración */
+.tableRow:hover .expires {
+    color: #00d1ff;
 }
