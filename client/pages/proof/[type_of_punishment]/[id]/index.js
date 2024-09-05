@@ -73,6 +73,7 @@ const ProofDetail = ({ proofData, hasProof, punishmentType, name }) => {
         </div>
     );
 };
+};
 
 export async function getServerSideProps(context) {
     const { type_of_punishment, id } = context.params;
