@@ -12,39 +12,43 @@ const formatTimestamp = (timestamp) => {
 const formatDuration = (start, end) => {
     if (!start || !end) return 'N/A';
 
-    if((end - start) / (1000 * 60 * 60 * 24) >= 1) {
+    if ((end - start) / (1000 * 60 * 60 * 24) >= 1) {
         return `${Math.floor((end - start) / (1000 * 60 * 60 * 24))} días`;
-    } else if((end - start) / (1000 * 60 * 60) >= 1) {
+    } else if ((end - start) / (1000 * 60 * 60) >= 1) {
         return `${Math.floor((end - start) / (1000 * 60 * 60))} horas`;
-    } else if((end - start) / (1000 * 60) >= 1) {
+    } else if ((end - start) / (1000 * 60) >= 1) {
         return `${Math.floor((end - start) / (1000 * 60))} minutos`;
-    } else if((end - start) / 1000 >= 1) {
+    } else if ((end - start) / 1000 >= 1) {
         return `${Math.floor((end - start) / 1000)} segundos`;
     } else {
         return 'N/A';
     }
 }
 
-const ProofDetail = ({ proofData, hasProof, punishmentType }) => {
+const ProofDetail = ({ proofData, hasProof, punishmentType, name }) => {
     if (!proofData) {
         return <div className={styles.loading}>Cargando...</div>;
     }
+
 
     const silent = isBufferTrue(proofData.silent);
     const ipban = isBufferTrue(proofData.ipban);
     const ipbanWildcard = isBufferTrue(proofData.ipban_wildcard);
     const active = isBufferTrue(proofData.active);
 
+
     const time = formatTimestamp(proofData.time);
     const until = formatTimestamp(proofData.until);
     const duration = formatDuration(proofData.time, proofData.until);
+
+
 
     return (
         <div className={styles.container}>
             <div className={styles.punishmentCard}>
                 <h1 className={styles.title}>Detalles de sanción</h1>
                 <p><strong>ID:</strong> {proofData.id}</p>
-                <p><strong>Usuario sancionado:</strong> {proofData.banned_by_name || 'N/A'}</p>
+                <p><strong>Usuario sancionado:</strong> {name || 'N/A'}</p>
                 <p><strong>UUID del usuario:</strong> {proofData.uuid}</p>
                 <p><strong>Sancionado por:</strong> {proofData.banned_by_name || 'N/A'}</p>
                 <p><strong>Duración:</strong> {duration}</p>
@@ -69,9 +73,11 @@ const ProofDetail = ({ proofData, hasProof, punishmentType }) => {
         </div>
     );
 };
+};
 
 export async function getServerSideProps(context) {
     const { type_of_punishment, id } = context.params;
+
     const apiUrl = `http://localhost:3000/api/${type_of_punishment}/id/${id}`;
 
     try {
@@ -91,6 +97,7 @@ export async function getServerSideProps(context) {
             throw new Error('Expected proofData to be an object.');
         }
 
+
         const { db } = await connectToDatabase();
 
         if (!db) {
@@ -100,14 +107,18 @@ export async function getServerSideProps(context) {
         const collection = db.collection('punishments');
         let punishmentType = type_of_punishment.slice(0, -1);
 
-        const punishment = await collection.findOne({ punishmentId: id , punishmentType: punishmentType });
+        const punishment = await collection.findOne({ punishmentId: id, punishmentType: punishmentType });
+
         const hasProof = punishment !== null;
+        let name = await fetch(`http://localhost:3000/api/getName/${proofData.uuid}`).then(res => res.json());
+        name = name?.name || null
 
         return {
             props: {
                 proofData,
                 hasProof,
-                punishmentType
+                punishmentType,
+                name
             },
         };
     } catch (error) {
