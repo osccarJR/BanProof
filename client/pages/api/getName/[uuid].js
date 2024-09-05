@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     try {
         const [row] = await pool.execute(`SELECT name FROM litebans_history WHERE uuid = ?`, [uuid]);
         res.json(row[0]);
-        console.log(row[0]);
+    
 
 
     } catch (error){

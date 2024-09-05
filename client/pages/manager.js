@@ -22,8 +22,9 @@ export default function Manager({ session, punishmentProofs }) {
                         .map(async (proof) => {
                             const response = await fetch(`/api/${proof.punishmentType}/id/${proof.punishmentId}`);
                             const data = await response.json();
+                            const name = await fetch(`/api/getName/${data.uuid}`).then((res) => res.json());
 
-                            return { ...data, type: proof.punishmentType };
+                            return { ...data, type: proof.punishmentType, username: name.name };
                         })
                 );
 
@@ -96,7 +97,7 @@ export default function Manager({ session, punishmentProofs }) {
                         <tr key={index}>
                             <td>{capitalizeFirstLetter(punishment.type)}</td>
                             <td>{punishment.id}</td>
-                            <td>{punishment.user}</td>
+                            <td>{punishment.username}</td>
                             <td>{punishment.reason}</td>
                             <td>{punishment.date}</td>
                             <td>{punishment.duration}</td>
