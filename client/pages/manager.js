@@ -1,7 +1,7 @@
 import { getSession } from "next-auth/react";
 
 export default function Manager({ session }) {
-    if (!session || !session.roles.includes('management')) {
+    if (!session || !session.roles.includes('Dev')) {
         return <p>Acceso no autorizado. Por favor, inicia sesión con una cuenta de administrador.</p>;
     }
 

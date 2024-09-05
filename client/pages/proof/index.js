@@ -31,7 +31,7 @@ export default function BansPage() {
                             {ban.name}
                         </td>
                         <td className={styles.bannedBy}>
-                            <img src={`/icons/staff/${ban.banned_by_name}.png`} alt={ban.banned_by_name} className={styles.bannedByIcon} />
+                            <img src={`/icons/staff/${ban.banned_by_name}.png`} className={styles.bannedByIcon} />
                             {ban.banned_by_name}
                         </td>
                         <td>{ban.reason}</td>

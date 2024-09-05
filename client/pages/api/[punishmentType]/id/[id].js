@@ -4,7 +4,7 @@ const config = require('../../../../config.json');
 
 let punishmentType;
 
-const { getSession } = require('next-auth/client');
+const { getSession } = require('next-auth/react');
 
 export default async function handler(req, res) {
 
