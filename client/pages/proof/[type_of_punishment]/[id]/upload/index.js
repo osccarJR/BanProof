@@ -65,7 +65,7 @@ const ProofUpload = () => {
                 throw new Error('Error al subir las pruebas');
             }
             alert('Pruebas subidas correctamente');
-            window.location.href = `/proof/${punishmentType}s/${punishmentId}`;
+            window.location.href = `/proof/${punishmentType}/${punishmentId}`;
         }).catch((error) => {
                 console.error('Error:', error);
                 alert('Error al subir las pruebas');

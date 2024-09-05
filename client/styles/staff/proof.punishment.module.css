@@ -3,49 +3,51 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #121212;
-    padding: 20px;
+    background-color: #1a1a1a;
 }
 
-.punishmentContainer {
-    background-color: #1e1e1e;
-    border-radius: 15px;
+.punishmentCard {
+    background-color: rgba(255, 255, 255, 0.08);
     padding: 30px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    width: 90%;
     max-width: 600px;
-    width: 100%;
     color: #e0e0e0;
+    text-align: center;
 }
 
-.punishmentContainer h1 {
+.title {
     font-size: 24px;
+    font-weight: bold;
+    color: #00d1ff;
     margin-bottom: 20px;
-    color: #ffffff;
 }
 
-.punishmentContainer p {
-    font-size: 18px;
+.p {
     margin: 10px 0;
-    color: #bbbbbb;
+    font-size: 16px;
 }
 
-.punishmentContainer p strong {
-    color: #ffffff;
+.strong {
+    color: #fff;
 }
 
 .proofButton {
-    background-color: #2f2f2f;
-    color: #ffffff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 18px;
+    background-color: #00d1ff;
+    color: #1a1a1a;
+    padding: 12px 24px;
+    border-radius: 8px;
     margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
-.loading {
-    font-size: 20px;
-    color: #777;
-    text-align: center;
-    margin-top: 50px;
+
+.proofButton:hover {
+    background-color: #00a3d9;
+    transform: scale(1.05);
+}
+
+.proofButton:active {
+    transform: scale(0.95);
 }
