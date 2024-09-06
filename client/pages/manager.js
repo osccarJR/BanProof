@@ -2,6 +2,9 @@ import { getSession } from "next-auth/react";
 import connectToDatabase from "../lib/mongoose";
 import { useEffect, useState } from "react";
 import styles from "../styles/manager/manager.module.css";
+import { Checkbox } from "@nextui-org/react";
+import { CheckmarkIcon } from "../icons/CheckmarkIcon";
+import { CrossmarkIcon } from "../icons/CrossmarkIcon";
 
 const capitalizeFirstLetter = (string) => {
     if (!string) return "";
@@ -32,7 +35,7 @@ const formatTimestamp = (timestamp) => {
 export default function Manager({ session, punishmentProofs }) {
     const [punishments, setPunishments] = useState([]);
     const [filter, setFilter] = useState("all");
-
+    const [isSelected, setIsSelected] = useState(false);
     useEffect(() => {
 
         const fetchPunishmentDetails = async () => {
@@ -132,9 +135,44 @@ export default function Manager({ session, punishmentProofs }) {
                                 <button className={styles.proofButton} onClick={() => window.location.href = `/proof/${punishment.type}/${punishment.id}/delete`}>Eliminar Pruebas</button>
                             </td>
                             <td>
-                                
-                                
-                                
+
+                                <div className={styles.checkboxContainer}>
+                                    <Checkbox
+                                        
+                                        icon={<CheckmarkIcon />}
+                                        classNames={{
+                                            base: styles.customCheckboxBase,
+                                            icon: styles.customCheckboxIcon,
+                                            wrapper: styles.customCheckboxWrapper,
+                                        }}
+                                        isSelected={isSelected}
+                                        onValueChange={() => setIsSelected(!isSelected)}
+                                        onClick={async () => {
+                                           /* const {db} = await connectToDatabase().then((res) => res);
+                                            const proof = await db.collection("punishments").findOne({punishmentId: punishment.id});
+                                            await db.collection("punishments").updateOne({punishmentId: punishment.id}, {$set: {isValid: !proof.isValid}});
+                                            */
+                                        }}
+
+                                    ></Checkbox>
+                                    <Checkbox
+                                        icon={<CrossmarkIcon />}
+                                        classNames={{
+                                            base: styles.customCheckboxBase,
+                                            icon: styles.customCheckboxIcon,
+                                            wrapper: styles.customCheckboxWrapper,
+                                        }}
+                                        isSelected={!isSelected}
+                                        onValueChange={() => setIsSelected(!isSelected)}
+                                        onClick={async () => {
+                                           /* const {db} = await connectToDatabase();
+                                            const proof = await db.collection("punishments").findOne({punishmentId: punishment.id});
+                                            await db.collection("punishments").updateOne({punishmentId: punishment.id}, {$set: {isValid: !proof.isValid}});
+                                            */
+                                        }}
+                                    ></Checkbox>
+                                </div>
+
                             </td>
                         </tr>
                     ))}
