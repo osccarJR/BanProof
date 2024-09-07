@@ -1,29 +1,29 @@
 import React from "react";
-import connectToDatabase from "@/lib/mongoose";
+const db = require('../../../../../lib/database');
 const ProofDetail = ({ proofData }) => {
     if (!proofData) {
         return <div>Cargando...</div>;
     }
 
-    const { proofType, proofContent } = proofData;
+    const { proof_type, proof_content } = proofData;
 
 
 
     return (
         <div>
-            <h1>Pruebas de sancion id: {proofData.punishmentId}</h1>
-            {proofType === "image" && (
-                <img src={proofContent} alt="Prueba" style={{ maxWidth: "30%" }} />
+            <h1>Pruebas de sancion id: {proofData.punishment_id}</h1>
+            {proof_type === "image" && (
+                <img src={proof_content} alt="Prueba" style={{ maxWidth: "30%" }} />
             )}
-            {proofType === "video" && (
+            {proof_type === "video" && (
                 <video controls style={{ maxWidth: "30%" }}>
-                    <source src={proofContent} type="video/mp4" />
+                    <source src={proof_content} type="video/mp4" />
                     Tu buscador no soporta videos.
                 </video>
             )}
-            {proofType === "url" && (
-                <a href={proofContent} target="_blank" rel="noopener noreferrer">
-                    {proofContent}
+            {proof_type === "url" && (
+                <a href={proof_content} target="_blank" rel="noopener noreferrer">
+                    {proof_content}
                 </a>
             )}
         </div>
@@ -34,20 +34,13 @@ const ProofDetail = ({ proofData }) => {
 export async function getServerSideProps(context) {
     const { type_of_punishment, id } = context.params;
 
-    const { db } = await connectToDatabase();
-
-    const collection = db.collection("punishments");
-
-    let punishmentType = type_of_punishment;
-
-    const proofData = await collection.findOne({
-        punishmentId: id,
-        punishmentType: punishmentType,
-    });
+    
+    const proofData = await db.getPunishmentByTypeAndId(type_of_punishment, id);
+   
 
     return {
         props: {
-            proofData: JSON.parse(JSON.stringify(proofData)),
+            proofData: JSON.parse(JSON.stringify(proofData[0])),
         },
     };
 }

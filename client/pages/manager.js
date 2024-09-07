@@ -1,5 +1,5 @@
 import { getSession } from "next-auth/react";
-import connectToDatabase from "../lib/mongoose";
+const db = require('../lib/database');
 import { useEffect, useState } from "react";
 import styles from "../styles/manager/manager.module.css";
 import { Checkbox } from "@nextui-org/react";
@@ -10,6 +10,7 @@ const capitalizeFirstLetter = (string) => {
     if (!string) return "";
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
+
 
 const formatDuration = (start, end) => {
     if (!start || !end) return 'N/A';
@@ -32,23 +33,47 @@ const formatTimestamp = (timestamp) => {
     return new Date(timestamp).toLocaleString();
 };
 
+const updateProof = async (proof) => {
+    let { punishment_id, punishment_type, isValid, validated } = proof;
+    isValid = !isValid;
+    validated = !validated;
+    const response = await fetch('/api/updateValidity', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ punishment_id, punishment_type, isValid, validated }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        console.error('Error updating proof:', data);
+    } else {
+        console.log('Proof updated:', data);
+    }
+
+    return data;
+
+}
 export default function Manager({ session, punishmentProofs }) {
     const [punishments, setPunishments] = useState([]);
     const [filter, setFilter] = useState("all");
-    const [isSelected, setIsSelected] = useState(false);
-    useEffect(() => {
+    const [selectedProof, setSelectedProof] = useState(null);
 
+    useEffect(() => {
+        
         const fetchPunishmentDetails = async () => {
             try {
                 const detailedPunishments = await Promise.all(
                     punishmentProofs
-                        .filter((proof) => filter === "all" || proof.punishmentType === filter)
+                        .filter((proof) => filter === "all" || proof.punishment_type === filter)
                         .map(async (proof) => {
-                            const response = await fetch(`/api/${proof.punishmentType}/id/${proof.punishmentId}`);
+                            const response = await fetch(`/api/${proof.punishment_type}/id/${proof.punishment_id}`);
                             const data = await response.json();
                             const name = await fetch(`/api/getName/${data.uuid}`).then((res) => res.json());
 
-                            return { ...data, type: proof.punishmentType, username: name.name };
+                            return { ...data, type: proof.punishment_type, username: name.name, punishmentProof: proof };
                         })
                 );
 
@@ -65,6 +90,24 @@ export default function Manager({ session, punishmentProofs }) {
     const handleFilterChange = (type) => {
         setFilter(type);
     };
+    const handleCheckboxChange = async (punishmentProof, isValid) => {
+        // Deselect the previously selected proof if not selecting the same proof
+        if (selectedProof && (selectedProof.punishment_id !== punishmentProof.punishment_id || selectedProof.punishment_type !== punishmentProof.punishment_type)) {
+            await updateProof({ ...selectedProof, isValid: false, validated: false });
+        }
+
+        
+        if (selectedProof && selectedProof.punishment_id === punishmentProof.punishment_id && selectedProof.punishment_type === punishmentProof.punishment_type && selectedProof.isValid === isValid) {
+            setSelectedProof(null);
+            await updateProof({ ...punishmentProof, isValid: false, validated: false });
+        } else {
+            
+            const updatedProof = { ...punishmentProof, isValid, validated: isValid !== undefined ? true : false };
+            setSelectedProof(updatedProof);
+            await updateProof(updatedProof);
+        }
+    };
+
 
     if (!session || !(session.roles.includes("management") || session.roles.includes("Dev"))) {
         return <p>Acceso no autorizado. Por favor, inicia sesión con una cuenta de administrador.</p>;
@@ -138,38 +181,26 @@ export default function Manager({ session, punishmentProofs }) {
 
                                 <div className={styles.checkboxContainer}>
                                     <Checkbox
-                                        
+                                        isSelected={selectedProof?.punishment_id === punishment.punishmentProof.punishment_id && selectedProof.punishment_type === punishment.punishmentProof.punishment_type && selectedProof.isValid === true}
                                         icon={<CheckmarkIcon />}
                                         classNames={{
                                             base: styles.customCheckboxBase,
                                             icon: styles.customCheckboxIcon,
                                             wrapper: styles.customCheckboxWrapper,
                                         }}
-                                        isSelected={isSelected}
-                                        onValueChange={() => setIsSelected(!isSelected)}
-                                        onClick={async () => {
-                                           /* const {db} = await connectToDatabase().then((res) => res);
-                                            const proof = await db.collection("punishments").findOne({punishmentId: punishment.id});
-                                            await db.collection("punishments").updateOne({punishmentId: punishment.id}, {$set: {isValid: !proof.isValid}});
-                                            */
-                                        }}
+
+                                        onChange={() => handleCheckboxChange(punishment.punishmentProof, true)}
 
                                     ></Checkbox>
                                     <Checkbox
+                                        isSelected={selectedProof?.punishment_id === punishment.punishmentProof.punishment_id && selectedProof.punishment_type === punishment.punishmentProof.punishment_type && selectedProof.isValid === false}
                                         icon={<CrossmarkIcon />}
                                         classNames={{
                                             base: styles.customCheckboxBase,
                                             icon: styles.customCheckboxIcon,
                                             wrapper: styles.customCheckboxWrapper,
                                         }}
-                                        isSelected={!isSelected}
-                                        onValueChange={() => setIsSelected(!isSelected)}
-                                        onClick={async () => {
-                                           /* const {db} = await connectToDatabase();
-                                            const proof = await db.collection("punishments").findOne({punishmentId: punishment.id});
-                                            await db.collection("punishments").updateOne({punishmentId: punishment.id}, {$set: {isValid: !proof.isValid}});
-                                            */
-                                        }}
+                                        onChange={() => handleCheckboxChange(punishment.punishmentProof, false)}
                                     ></Checkbox>
                                 </div>
 
@@ -184,6 +215,7 @@ export default function Manager({ session, punishmentProofs }) {
 
 export async function getServerSideProps(context) {
     const session = await getSession(context);
+    
 
     if (!session) {
         return {
@@ -193,10 +225,18 @@ export async function getServerSideProps(context) {
             },
         };
     }
+    await db.connectToDatabase();
 
-    const { db } = await connectToDatabase();
-
-    const punishmentProofs = await db.collection("punishments").find({}).toArray();
+    const punishmentProofs = await db.getAllPunishments();
+    console.log(punishmentProofs);
+    if (!punishmentProofs) {
+        return {
+            props: {
+                session,
+                punishmentProofs: [],
+            },
+        };
+    }
 
 
     return {

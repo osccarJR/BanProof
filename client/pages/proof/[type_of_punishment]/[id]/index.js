@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../../../../styles/staff/proof.punishment.module.css';
-import connectToDatabase from '@/lib/mongoose';
+const db = require('../../../../lib/database');
 
 const isBufferTrue = (buffer) => buffer?.data?.[0] === 1;
 
@@ -25,9 +25,16 @@ const formatDuration = (start, end) => {
     }
 }
 
-const ProofDetail = ({ proofData, hasProof, punishmentType, name }) => {
+const ProofDetail = ({ proofData, hasProof, type_of_punishment: punishmentType , name }) => {
     if (!proofData) {
         return <div className={styles.loading}>Cargando...</div>;
+    }
+   
+    //check if punishmenttype contains a s at the end and remove it
+    if(punishmentType.charAt(punishmentType.length - 1) === 's') {
+        punishmentType = punishmentType.slice(0, -1);
+        window.location.href = `/proof/${punishmentType}/${proofData.id}`;
+
     }
 
 
@@ -76,9 +83,15 @@ const ProofDetail = ({ proofData, hasProof, punishmentType, name }) => {
 };
 
 export async function getServerSideProps(context) {
-    const { type_of_punishment, id } = context.params;
+    let { type_of_punishment, id } = context.params;
+    let punishmentType;
+    if(type_of_punishment.charAt(type_of_punishment.length - 1) === 's') {
+        punishmentType = type_of_punishment.slice(0, -1);
+    } else {
+        punishmentType = type_of_punishment;
+    }
 
-    const apiUrl = `http://localhost:3000/api/${type_of_punishment}/id/${id}`;
+    const apiUrl = `http://localhost:3000/api/${punishmentType}/id/${id}`;
 
     try {
         const response = await fetch(apiUrl);
@@ -98,18 +111,14 @@ export async function getServerSideProps(context) {
         }
 
 
-        const { db } = await connectToDatabase();
 
-        if (!db) {
-            throw new Error('Database connection failed.');
-        }
+       
+        
 
-        const collection = db.collection('punishments');
-        let punishmentType = type_of_punishment
+        const punishment = await db.getPunishmentByTypeAndId(punishmentType, id);
+        console.log(punishment);
 
-        const punishment = await collection.findOne({ punishmentId: id, punishmentType: punishmentType });
-
-        const hasProof = punishment !== null;
+        const hasProof = punishment.length > 0;
         let name = await fetch(`http://localhost:3000/api/getName/${proofData.uuid}`).then(res => res.json());
         name = name?.name || null
 
@@ -117,7 +126,7 @@ export async function getServerSideProps(context) {
             props: {
                 proofData,
                 hasProof,
-                punishmentType,
+                type_of_punishment,
                 name
             },
         };

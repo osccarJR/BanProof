@@ -7,11 +7,11 @@ const { getSession } = require('next-auth/react');
 export default async function handler(req, res) {
 
     const pool = mysql.createPool({
-        host: config.db_host,
-        port: config.db_port || 3306,
-        user: config.db_user,
-        password: config.db_pass,
-        database: config.db_name,
+        host: config.litebans_db.db_host,
+        port: config.litebans_db.db_port || 3306,
+        user: config.litebans_db.db_user,
+        password: config.litebans_db.db_pass,
+        database: config.litebans_db.db_name,
         waitForConnections: true,
         connectionLimit: 10,
         queueLimit: 0

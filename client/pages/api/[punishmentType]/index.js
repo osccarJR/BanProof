@@ -1,19 +1,19 @@
 import mysql from 'mysql2/promise';
 
 const config = require('../../../config.json');
-
+const db = require("../../../lib/database");
 let punishmentType;
 
 const handler = async (req, res) => {
 
     let punishmentType = req.query.punishmentType;
-
+    
     const pool = mysql.createPool({
-        host: config.db_host,
-        port: config.db_port || 3306,
-        user: config.db_user,
-        password: config.db_pass,
-        database: config.db_name,
+        host: config.litebans_db.db_host,
+        port: config.litebans_db.db_port || 3306,
+        user: config.litebans_db.db_user,
+        password: config.litebans_db.db_pass,
+        database: config.litebans_db.db_name,
         waitForConnections: true,
         connectionLimit: 10,
         queueLimit: 0
@@ -38,7 +38,7 @@ const handler = async (req, res) => {
 export async function getServerSideProps(context) {
 
     punishmentType = context.params.punishmentType;
-
+    await db.connectToDatabase();
     return {
         props: {
             punishmentType

@@ -1,0 +1,16 @@
+{
+    "litebans_db": { 
+        "db_host": "localhost",
+        "db_port": 3306,
+        "db_user": "root",
+        "db_pass": "password",
+        "db_name": "litebans_db"
+    },
+    "proof_db":{
+        "db_host": "localhost",
+        "db_port": 3306,
+        "db_user": "root",
+        "db_pass": "password",
+        "db_name": "proof_db"
+    }
+}
